@@ -13,7 +13,7 @@ const voteStatusMessageEl = document.getElementById('vote-status-message');
 const userVotedStatusEl = document.getElementById('user-voted-status');
 
 // --- TO BE REPLACED BY USER ---
-const contractAddress = '0x537d252B1D91979E8Fdc3C67d4799b0d5a4b0B3f'; // Replace with your contract address on Sepolia (or other public net)
+const contractAddress = '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707'; // Replace with your contract address on Sepolia (or other public net)
 const contractABI = [
     {
       "inputs": [
@@ -194,11 +194,16 @@ if (typeof window.ethereum === 'undefined') {
 
 async function connectWallet() {
     clearMessages();
+    console.log("Attempting to connect wallet...");
     try {
         provider = new ethers.BrowserProvider(window.ethereum);
+        console.log("Provider created.");
         signer = await provider.getSigner();
+        console.log("Signer obtained.");
         currentAccount = await signer.getAddress();
+        console.log("Account address obtained:", currentAccount);
         const network = await provider.getNetwork();
+        console.log("Network obtained:", network.name);
 
         connectionStatusEl.textContent = 'Connected';
         accountAddressEl.textContent = currentAccount;
@@ -206,10 +211,22 @@ async function connectWallet() {
         connectWalletBtn.textContent = 'Wallet Connected';
         connectWalletBtn.disabled = true;
 
+        console.log("Calling initializeContract()...");
         initializeContract();
+        
+        console.log("Calling loadVotingInfo()...");
         await loadVotingInfo();
+        console.log("Returned from loadVotingInfo().");
+
+        console.log("Calling loadCandidates()...");
         await loadCandidates();
+        console.log("Returned from loadCandidates().");
+
+        console.log("Calling checkUserVoteStatus()...");
         await checkUserVoteStatus();
+        console.log("Returned from checkUserVoteStatus().");
+
+        console.log("Wallet connection process completed.");
 
     } catch (error) {
         console.error('Error connecting wallet:', error);
@@ -219,6 +236,7 @@ async function connectWallet() {
 }
 
 function initializeContract() {
+    console.log("Inside initializeContract(). Checking conditions...");
     if (provider && signer && contractAddress && contractABI.length > 0) {
         contract = new ethers.Contract(contractAddress, contractABI, signer);
         console.log('Contract initialized');
@@ -229,11 +247,22 @@ function initializeContract() {
 }
 
 async function loadVotingInfo() {
-    if (!contract) return;
+    console.log("Inside loadVotingInfo().");
+    if (!contract) {
+        console.log("loadVotingInfo: Contract not initialized, returning.");
+        return;
+    }
     try {
+        console.log("loadVotingInfo: Calling contract.votingStartTime()...");
         const startTime = await contract.votingStartTime();
+        console.log("loadVotingInfo: votingStartTime() returned:", startTime.toString());
+        
+        console.log("loadVotingInfo: Calling contract.votingEndTime()...");
         const endTime = await contract.votingEndTime();
+        console.log("loadVotingInfo: votingEndTime() returned:", endTime.toString());
+        
         const currentTime = BigInt(Math.floor(Date.now() / 1000));
+        console.log("loadVotingInfo: Current time (BigInt seconds):", currentTime.toString());
 
         startTimeEl.textContent = new Date(Number(startTime) * 1000).toLocaleString();
         endTimeEl.textContent = new Date(Number(endTime) * 1000).toLocaleString();
@@ -255,7 +284,11 @@ async function loadVotingInfo() {
 }
 
 async function loadCandidates() {
-    if (!contract) return;
+    console.log("Inside loadCandidates().");
+    if (!contract) {
+        console.log("loadCandidates: Contract not initialized, returning.");
+        return;
+    }
     candidatesListEl.innerHTML = '<p>Loading...</p>';
     try {
         const totalCandidates = await contract.totalCandidates();
@@ -294,7 +327,11 @@ async function loadCandidates() {
 }
 
 async function checkUserVoteStatus() {
-    if (!contract || !currentAccount) return;
+    console.log("Inside checkUserVoteStatus().");
+    if (!contract || !currentAccount) {
+        console.log("checkUserVoteStatus: Contract or currentAccount not available, returning.");
+        return;
+    }
     try {
         const hasVoted = await contract.hasVoted(currentAccount);
         if (hasVoted) {
