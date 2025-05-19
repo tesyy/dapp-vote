@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decentralized Voting DApp</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; color: #333; }
+        .container { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1, h2 { color: #333; }
+        button { background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        button:hover { background-color: #0056b3; }
+        button:disabled { background-color: #ccc; cursor: not-allowed; }
+        #wallet-info, #network-info { margin-bottom: 15px; padding: 10px; background-color: #e9ecef; border-radius: 4px; }
+        .candidate { border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; border-radius: 4px; background-color: #f9f9f9; }
+        .candidate label { display: block; margin-bottom: 5px; }
+        .error { color: red; margin-top: 10px; }
+        .info { color: green; margin-top: 10px; }
+        #voting-period { font-style: italic; margin-bottom: 15px;}
+    </style>
+    <!-- Include ethers.js from a CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.11.1/ethers.umd.min.js" integrity="sha512-qp190c9mQz0dBG4WDw9gh96lS4VPmgewqOn5h/i04TaANIODXxFagRTaga4nS6VkbWFraPan1BGwZh6FS48uHg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Decentralized Voting DApp</h1>
+
+        <div id="wallet-info">
+            <p>Status: <span id="connection-status">Not Connected</span></p>
+            <p>Account: <span id="account-address">N/A</span></p>
+        </div>
+        <div id="network-info">
+            Network: <span id="network-name">N/A</span>
+        </div>
+
+        <button id="connect-wallet-btn">Connect Wallet</button>
+
+        <hr>
+
+        <h2>Voting Information</h2>
+        <div id="voting-period">
+            <p>Voting Start: <span id="start-time">Loading...</span></p>
+            <p>Voting End: <span id="end-time">Loading...</span></p>
+            <p>Current Status: <span id="vote-status-message">Loading...</span></p>
+        </div>
+         <div id="user-voted-status">You have not voted yet.</div>
+
+
+        <h2>Candidates</h2>
+        <div id="candidates-list">
+            <p>Loading candidates...</p>
+        </div>
+        <button id="cast-vote-btn" disabled>Cast Vote</button>
+        <p id="vote-feedback" class="info"></p>
+        <p id="error-message" class="error"></p>
+    </div>
+
+    <script src="App.js"></script>
+</body>
+</html> 
