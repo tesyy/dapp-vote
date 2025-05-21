@@ -13,7 +13,7 @@ const voteStatusMessageEl = document.getElementById('vote-status-message');
 const userVotedStatusEl = document.getElementById('user-voted-status');
 
 // --- TO BE REPLACED BY USER ---
-const contractAddress = '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707'; // Replace with your contract address on Sepolia (or other public net)
+const contractAddress = '0xaAd12485cD55c8d5295e93735362e60b366a807A'; // Replace with your contract address on Sepolia (or other public net)
 const contractABI = [
     {
       "inputs": [
@@ -394,6 +394,7 @@ if (window.ethereum) {
         console.log('Accounts changed:', accounts);
         if (accounts.length === 0) {
             // MetaMask is locked or the user has disconnected all accounts
+            console.log("accountsChanged: No accounts found, resetting UI.");
             currentAccount = null;
             connectionStatusEl.textContent = 'Disconnected';
             accountAddressEl.textContent = 'N/A';
@@ -403,9 +404,21 @@ if (window.ethereum) {
             castVoteBtn.disabled = true;
             candidatesListEl.innerHTML = '<p>Connect your wallet to see candidates.</p>';
             userVotedStatusEl.textContent = '';
+            // Clear voting info as well
+            startTimeEl.textContent = 'Loading...';
+            endTimeEl.textContent = 'Loading...';
+            voteStatusMessageEl.textContent = 'Loading...';
         } else {
-            // Re-connect or update account
-            connectWallet(); 
+            // TEMPORARY DEBUG: Just log, don't automatically recall connectWallet here to simplify initial flow
+            console.log("accountsChanged: Accounts found. Current account set to:", accounts[0]);
+            console.log("Ensure you click 'Connect Wallet' if the DApp is not already connected.");
+            // currentAccount = accounts[0]; // Optionally update currentAccount here if needed for other logic
+            // provider = new ethers.BrowserProvider(window.ethereum); // Re-initialize provider if necessary
+            // initializeContract(); // Re-initialize contract if provider/signer might change
+            // loadVotingInfo();
+            // loadCandidates();
+            // checkUserVoteStatus();
+            // connectWallet(); // DO NOT automatically recall connectWallet here for now
         }
     });
 
