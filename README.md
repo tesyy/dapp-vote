@@ -1,19 +1,10 @@
-# Decentralized Voting DApp
+# COMP 4541 Individual Project: Decentralized Voting DApp
 
 This project implements a Decentralized Voting Application (DApp) using Ethereum smart contracts and a web-based front-end. It allows users to connect their Ethereum wallets, view candidates, see voting periods, and cast votes for a "Club President Election."
 
-The DApp is live and accessible at: [https://tesyy.github.io/dapp-vote/](https://tesyy.github.io/dapp-vote/)
+**The primary instance of this DApp is live and accessible at: [https://tesyy.github.io/dapp-vote/](https://tesyy.github.io/dapp-vote/)**
 
-## Project Structure
-
--   `contracts/DecentralizedVoting.sol`: The Solidity smart contract for the voting logic.
--   `scripts/deploy.js`: Hardhat script to deploy the smart contract and initialize it with candidates and voting times. It also attempts to update the contract address in the front-end for local development.
--   `hardhat.config.js`: Hardhat configuration file.
--   `docs/`: Contains the static front-end files (`index.html`, `App.js`, and any CSS) served by GitHub Pages.
--   `test/`: Contains Hardhat tests for the smart contract.
--   `package.json`: Defines project dependencies and scripts.
-
-## Features
+## 1. Features
 
 -   Wallet connection (MetaMask).
 -   Display of voting start and end times.
@@ -22,59 +13,154 @@ The DApp is live and accessible at: [https://tesyy.github.io/dapp-vote/](https:/
 -   Prevents users from voting twice.
 -   Restricts voting to the defined voting period.
 
+## 2. Interacting with the Live DApp on GitHub Pages
 
-## Accessing the Live DApp on GitHub Pages
+The live DApp at [https://tesyy.github.io/dapp-vote/](https://tesyy.github.io/dapp-vote/) is connected to a `DecentralizedVoting` smart contract that has been pre-deployed and initialized on the **Sepolia testnet**. For this live instance, the candidates were added to the Sepolia smart contract by the project developer after its deployment (e.g., using a script or Etherscan). The contract has also been verified on Sepolia Etherscan for transparency.
 
-The DApp is hosted on GitHub Pages at: [https://tesyy.github.io/dapp-vote/](https://tesyy.github.io/dapp-vote/)
+### How to Use the Live DApp:
 
-For the live DApp to function correctly, it needs to connect to a `DecentralizedVoting` smart contract deployed on the **Sepolia testnet**.
-
-### Ensuring the Live DApp Works:
-
-1.  **Deploy Your Smart Contract to Sepolia Testnet:**
-    -   Using Hardhat or another deployment tool, deploy your `contracts/DecentralizedVoting.sol` smart contract specifically to the **Sepolia testnet**.
-    -   Carefully note the **deployed contract address** on the Sepolia testnet.
-
-2.  **Update Front-End Configuration (`docs/App.js`):
-    -   Open the `docs/App.js` file in your local repository.
-    -   Find the line: `const contractAddress = '...';`
-    -   Replace the existing address with **your new Sepolia contract address** obtained from the previous step.
-    -   The `contractABI` variable in `docs/App.js` should generally remain unchanged as it's determined by the contract structure, not its deployment location.
-
-3.  **Commit and Push Changes to GitHub:**
-    -   Save the modified `docs/App.js` file.
-    -   Commit this change to your Git repository:
-        ```bash
-        git add docs/App.js
-        git commit -m "Update contract address to Sepolia deployment for live DApp"
-        git push
-        ```
-    -   GitHub Pages will automatically rebuild your site from the `docs/` folder in your specified branch (usually `main` or `master`). This might take a few minutes.
-
-### Interacting with the Live DApp:
-
-Once the above steps are completed and `docs/App.js` points to a valid contract on the Sepolia testnet:
-
-1.  **Go to the DApp URL:** [https://tesyy.github.io/dapp-vote/](https://tesyy.github.io/dapp-vote/)
+1.  **Go to the DApp URL:** Navigate to [https://tesyy.github.io/dapp-vote/](https://tesyy.github.io/dapp-vote/)
 2.  **Connect MetaMask to Sepolia Testnet:**
-    -   Ensure your MetaMask wallet is installed and unlocked.
-    -   Crucially, connect MetaMask to the **Sepolia testnet**.
-3.  **Interact:**
-    -   Click the "Connect Wallet" button on the DApp.
-    -   If the DApp successfully connects to your contract on Sepolia, it will display voting information, candidates, and allow you to vote.
+    -   Ensure you have the [MetaMask](https://metamask.io/) browser extension installed and unlocked.
+    -   Crucially, connect/switch your MetaMask to the **Sepolia testnet**.
+3.  **Interact with the DApp:**
+    -   Click the "Connect Wallet" button on the DApp page.
+    -   Once connected, the DApp will display:
+        -   Your connected account address and network (should show Sepolia).
+        -   The voting start and end times for the pre-configured election.
+        -   The current status of the voting period.
+        -   The list of predefined candidates.
+    -   If the voting period is active and candidates are loaded, you can select a candidate and click "Cast Vote".
+    -   Approve the transaction in MetaMask. This will require a small amount of Sepolia ETH (test currency) for gas fees.
+    -   Your vote will be recorded on the Sepolia testnet for this specific DApp instance.
 
-### GitHub Pages Configuration Notes:
+### Important Notes for Live DApp Users:
 
--   This project is configured to serve the GitHub Pages site from the `/docs` folder of the `main` (or `master`) branch. You can verify this in your GitHub repository settings under "Settings" > "Pages".
+-   **Network:** You *must* use the Sepolia testnet in MetaMask.
+-   **Gas Fees:** Voting requires Sepolia ETH for gas. You can get this from Sepolia faucets (search online for "Sepolia faucet").
+-   **Pre-configured Contract:** This live version interacts with a specific, already set up contract. To experiment with your own contract, see Section 3.
 
-### Important Considerations for the Live DApp:
+## 3. Developing and Deploying Your Own Instance
 
--   **Network Consistency:** Users *must* have their MetaMask connected to the **Sepolia testnet** for the DApp to function correctly with the intended public contract.
--   **Gas Fees:** All transactions on the Sepolia testnet (like casting a vote) will require users to pay gas fees in Sepolia ETH (which is test currency, not real ETH).
--   **Contract Initialization:** Ensure your smart contract deployed on Sepolia has candidates added and the voting period is correctly set up according to your needs.
--   **Security:** While Sepolia is a testnet, always practice good security habits. If you were to deploy to a mainnet with real value, ensure your smart contract code is thoroughly audited.
+If you wish to clone this project, modify it, or deploy your own instance of the smart contract and front-end, follow these instructions.
+
+### 3.1. Prerequisites for Development
+
+-   [Node.js](https://nodejs.org/) (v18 or later recommended)
+-   [Git](https://git-scm.com/)
+-   [MetaMask](https://metamask.io/) browser extension (for interacting with your deployments)
+
+### 3.2. Clone the Repository
+
+```bash
+git clone https://github.com/tesyy/dapp-vote.git 
+cd dapp-vote
+```
+
+### 3.3. Install Dependencies
+
+```bash
+npm install
+```
+
+### 3.4. Local Development & Testing
+
+This allows you to run everything on your local machine using Hardhat's development network.
+
+1.  **Start a Local Hardhat Network:**
+    Open a terminal (Terminal 1) in the project root and run:
+    ```bash
+    npx hardhat node
+    ```
+    Keep this terminal running. It provides a local blockchain and test accounts.
+
+2.  **Deploy Contract Locally & Add Candidates:**
+    Open a *new* terminal (Terminal 2) in the project root. The `scripts/deploy.js` script is designed for this local setup.
+    ```bash
+    npx hardhat run scripts/deploy.js --network localhost
+    ```
+    This script deploys the `DecentralizedVoting` contract to your local Hardhat node, sets a voting period, and adds predefined candidates to this local instance. It also attempts to update `docs/App.js` with the local contract address.
+
+3.  **Run the Front-End Locally:**
+    Open a *third* terminal (Terminal 3). Navigate to the `docs` directory:
+    ```bash
+    cd docs
+    python3 -m http.server 8000
+    ```
+    (Or use another simple HTTP server like `npx http-server -p 8000` if Python 3 is not available).
+
+4.  **Configure MetaMask for Localhost:**
+    -   Connect MetaMask to the `Localhost 8545` network (Chain ID `31337`).
+    -   Import a test account from the `npx hardhat node` output using its private key.
+
+5.  **Access Your Local DApp:** Open `http://localhost:8000` in your browser.
+
+6.  **Run Smart Contract Tests:**
+    To execute the Solidity tests located in the `test/` directory:
+    ```bash
+    npx hardhat test
+    ```
+
+### 3.5. Deploying Your Own Contract to a Public Network (e.g., Sepolia)
+
+1.  **Configure Hardhat for Sepolia:**
+    -   Ensure your `hardhat.config.js` has a `sepolia` network configuration:
+        ```javascript
+        // hardhat.config.js excerpt
+        networks: {
+          sepolia: {
+            url: process.env.SEPOLIA_RPC_URL || "",
+            accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+          }
+        }
+        ```
+    -   Create a `.env` file in the project root (and ensure it's in `.gitignore`):
+        ```env
+        SEPOLIA_RPC_URL="YOUR_SEPOLIA_RPC_URL_FROM_INFURA_ALCHEMY_ETC"
+        PRIVATE_KEY="YOUR_PRIVATE_KEY_OF_ACCOUNT_WITH_SEPOLIA_ETH"
+        ETHERSCAN_API_KEY="YOUR_ETHERSCAN_API_KEY_FOR_VERIFICATION" # Optional but recommended
+        ```
+    -   Obtain `SEPOLIA_RPC_URL` from a node provider (Infura, Alchemy).
+    -   Fund the account corresponding to `PRIVATE_KEY` with Sepolia ETH from a faucet.
+
+2.  **Deploy the Contract to Sepolia:**
+    -   You can adapt `scripts/deploy.js` or create a new script specifically for Sepolia deployment. Ensure it correctly sets the `_startTime` and `_endTime` constructor arguments for your desired voting period.
+    -   Example command: `npx hardhat run your-sepolia-deploy-script.js --network sepolia`
+    -   Note the **deployed contract address** on Sepolia.
+
+3.  **Initialize Your Public Contract (Add Candidates):**
+    -   A newly deployed public contract is empty. Add candidates using one of these methods:
+        -   **Modify and run `scripts/addCandidatesSepolia.js`:** Update the placeholder address in this script with your new Sepolia contract address. Then run: `npx hardhat run scripts/addCandidatesSepolia.js --network sepolia`
+        -   **Use Etherscan:** If you verify your contract (see next step), use the "Write Contract" tab on Sepolia Etherscan.
+
+4.  **Verify Your Contract on Sepolia Etherscan (Recommended):**
+    -   This makes your source code public and allows interaction via Etherscan.
+    -   You can verify manually on the Sepolia Etherscan website or use Hardhat's verification plugin (`@nomicfoundation/hardhat-verify`).
+    -   For plugin use, ensure `etherscan.apiKey` is set in `hardhat.config.js` (using `ETHERSCAN_API_KEY` from `.env`).
+    -   Command: `npx hardhat verify --network sepolia YOUR_SEPOLIA_CONTRACT_ADDRESS "constructorArg1" "constructorArg2"` (Provide actual constructor arguments if any, like start and end times).
+
+### 3.6. Hosting Your Own Front-End (e.g., on GitHub Pages)
+
+If you want to host your own version of the front-end connected to *your* publicly deployed contract:
+
+1.  **Update `docs/App.js`:** Change `const contractAddress = '...';` to *your* new public contract address (e.g., your Sepolia address).
+2.  **Commit and Push:** Save `docs/App.js`, commit, and push to your GitHub repository.
+3.  **Configure GitHub Pages:**
+    -   In your GitHub repository settings, go to "Pages".
+    -   Set the source to deploy from your main branch and the `/docs` folder.
+    -   Your site will be available at `https://<your-username>.github.io/<your-repository-name>/`.
+
+## Project Structure Overview
+
+-   `contracts/DecentralizedVoting.sol`: The Solidity smart contract.
+-   `scripts/`: Deployment and utility scripts.
+-   `test/`: Smart contract tests.
+-   `docs/`: Static front-end files.
+-   `hardhat.config.js`: Hardhat configuration.
+-   `package.json`: Project dependencies.
+-   `.gitignore`: Specifies intentionally untracked files that Git should ignore.
+-   `README.md`: This file.
 
 ---
-
-This README provides guidance for interacting with the live DApp. Feel free to expand it with more details about your project.
+This README provides guidance for interacting with the live DApp and for developing your own instance. Feel free to expand it.
 
